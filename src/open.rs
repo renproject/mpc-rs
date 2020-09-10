@@ -1,3 +1,4 @@
+use crate::util;
 use secp256k1::scalar::Scalar;
 use shamir::vss::{self, SharingCommitment, VShare};
 
@@ -87,7 +88,7 @@ impl State {
         if vshare_batch.len() != b {
             return Err(InvalidBatchSize);
         }
-        if !all_indices_equal_in_vshare_batch(&vshare_batch) {
+        if !util::all_indices_equal_in_vshare_batch(&vshare_batch) {
             return Err(InconsistentIndices);
         }
 
@@ -118,12 +119,6 @@ impl State {
             Ok(None)
         }
     }
-}
-
-fn all_indices_equal_in_vshare_batch(vshares: &[VShare]) -> bool {
-    vshares
-        .windows(2)
-        .all(|w| w[0].share.index == w[1].share.index)
 }
 
 #[cfg(test)]

@@ -59,6 +59,34 @@ pub fn random_sharing_batch(
     (vshare_batches, commitment_batch, secrets, decommitments)
 }
 
+pub fn zero_sharing_batch(
+    n: usize,
+    k: usize,
+    b: usize,
+    indices: &[Scalar],
+    h: &Gej,
+) -> (Vec<Vec<VShare>>, Vec<SharingCommitment>) {
+    let mut sharing_batch: Vec<Vec<VShare>> = Vec::with_capacity(b);
+    let mut commitment_batch: Vec<shamir::vss::SharingCommitment> = Vec::with_capacity(b);
+    for i in 0..b {
+        sharing_batch.push(Vec::with_capacity(n));
+        sharing_batch[i].resize_with(n, VShare::default);
+        let mut v = Vec::with_capacity(k);
+        v.resize_with(k, Gej::default);
+        commitment_batch.push(SharingCommitment::new_from_vec(v));
+        vss::vshare_secret_in_place(
+            &mut sharing_batch[i],
+            &mut commitment_batch[i],
+            &h,
+            &indices,
+            &Scalar::zero(),
+        );
+    }
+    let vshare_batches = transpose(sharing_batch);
+
+    (vshare_batches, commitment_batch)
+}
+
 pub fn rxg_inputs(
     k: usize,
     b: usize,

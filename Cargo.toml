@@ -9,3 +9,4 @@ edition = "2018"
 [dependencies]
 secp256k1 = { path = "../secp256k1" }
 shamir = { path = "../shamir" }
+sha2 = "0.9.1"
