@@ -259,7 +259,6 @@ mod tests {
                 if count != threshold {
                     assert_eq!(res, Ok(None));
                 } else {
-                    println!("trying");
                     assert!(res.is_ok());
                     let opt = res.unwrap();
                     assert!(opt.is_some());
